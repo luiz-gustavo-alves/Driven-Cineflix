@@ -2,7 +2,7 @@ import { SeatsContainer, SeatItem } from "./style";
 
 export default function Seats(props) {
 
-    const { seats, reservedSeats, updateReservedSeats } = props;
+    const { seats, reservedSeats, seatsNumber, updateSeatRegistration } = props;
 
     const seatCondition = (id) => {
 
@@ -35,16 +35,19 @@ export default function Seats(props) {
             alert("Esse assento não está disponível");
         } else {
 
-            let newReservedSeats;
+            let newReservedSeats, newSeatsNumber;
             const { isReserved, index } = seatCondition(seat.id);
 
             if (!isReserved) {
                 newReservedSeats = [...reservedSeats, seat.id];
+                newSeatsNumber = [...seatsNumber, seat.name];
             } else {
                 reservedSeats.splice(index, 1);
+                seatsNumber.splice(index, 1);
                 newReservedSeats = [...reservedSeats];
+                newSeatsNumber = [...seatsNumber];
             }
-            updateReservedSeats({ids: newReservedSeats});
+            updateSeatRegistration({ids: newReservedSeats, numbers: newSeatsNumber});
         }
     }
 

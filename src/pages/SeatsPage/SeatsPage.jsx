@@ -13,12 +13,12 @@ import loading from "/loading.gif";
 
 export default function SeatsPage(props) {
 
-    const { setError } = props;
+    const { setUserData, setError } = props;
     const { idSessao } = useParams();
     const navigate = useNavigate();
 
-    const [data, setData] = useState(null);
-    const [seatRegistration, setSeatRegistration] = useState({ids: [], name: "", cpf: ""});
+    const [movieData, setMovieData] = useState(null);
+    const [seatRegistration, setSeatRegistration] = useState({ids: [], numbers: [], name: "", cpf: ""});
 
     const updateSeatRegistration = (newData) => {
 
@@ -31,8 +31,6 @@ export default function SeatsPage(props) {
     const registerSeat = (event) => {
 
         event.preventDefault();
-
-        const { ids, name, cpf } = seatRegistration;
 
         const isValidRequest = (ids, name, cpf) => {
 
@@ -55,13 +53,23 @@ export default function SeatsPage(props) {
             return {validRequest: true, message: "Successful registration."};
         }
 
-        const { validRequest, message } = isValidRequest(ids, name, cpf);
+        const { validRequest, message } = isValidRequest(seatRegistration.ids, seatRegistration.name, seatRegistration.cpf);
 
         if (validRequest) {
 
             const URL = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
-            axios.post(URL, seatRegistration)
-            .then(() => navigate("/sucesso"))
+            axios.post(URL, {ids: seatRegistration.ids, name: seatRegistration.name, cpf: seatRegistration.cpf})
+            .then(() => {
+                setUserData({
+                    title: movieData.movie.title,
+                    date: day.date,
+                    time: movieData.name,
+                    seatsNumber: seatRegistration.numbers.sort(),
+                    name: seatRegistration.name,
+                    cpf: seatRegistration.cpf
+                });
+                navigate("/sucesso");
+            })
             .catch(err => setError({isTrue: true, message: err.message}));
 
         } else {
@@ -74,16 +82,16 @@ export default function SeatsPage(props) {
         const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
 
         axios.get(URL)
-        .then(res => {setData(res.data)})
+        .then(res => {setMovieData(res.data)})
         .catch(err => setError({isTrue: true, message: err.message}));
 
     }, [idSessao, setError]);
 
-    if (data === null) {
+    if (movieData === null) {
         return (<Loading> <img src={loading} /> </Loading>);
     }
 
-    const { day, movie, seats } = data;
+    const { day, movie, seats } = movieData;
 
     return (
         <PageContainer>
@@ -92,7 +100,8 @@ export default function SeatsPage(props) {
             <Seats 
                 seats={seats} 
                 reservedSeats={seatRegistration.ids} 
-                updateReservedSeats={updateSeatRegistration} 
+                seatsNumber={seatRegistration.numbers}
+                updateSeatRegistration={updateSeatRegistration} 
             />
 
             <CaptionContainer>
@@ -153,7 +162,7 @@ export default function SeatsPage(props) {
                 </div>
                 <div>
                     <p>{movie.title}</p>
-                    <p>{day.weekday} - {data.name}</p>
+                    <p>{day.weekday} - {movieData.name}</p>
                 </div>
             </FooterContainer>
 
