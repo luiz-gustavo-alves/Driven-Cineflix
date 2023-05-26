@@ -37,7 +37,7 @@ export default function SessionsPage(props) {
             
             <SessionInfo sessionInfo={session.days}/>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={session.posterURL} alt={session.title} title={session.title} />
                 </div>

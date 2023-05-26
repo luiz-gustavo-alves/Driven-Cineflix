@@ -56,7 +56,7 @@ export default function Seats(props) {
             {seats.map(seat => {
                 const { status, borderColor, backgroundColor } = getSeatStatus(seat);
                 return (
-                    <SeatItem
+                    <SeatItem data-test="seat"
                         key={seat.id}
                         borderColor={borderColor}
                         backgroundColor={backgroundColor}

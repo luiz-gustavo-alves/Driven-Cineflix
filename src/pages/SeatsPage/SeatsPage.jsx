@@ -134,7 +134,7 @@ export default function SeatsPage(props) {
 
             <FormContainer onSubmit={registerSeat}>
                 <label htmlFor="name">Nome do Comprador:</label>
-                <input type="text"
+                <input type="text" data-test="client-name"
                     required
                     maxLength="100"
                     id="name"
@@ -144,7 +144,7 @@ export default function SeatsPage(props) {
                 />
 
                 <label htmlFor="cpf">CPF do Comprador:</label>
-                <input type="text"
+                <input type="text" data-test="client-cpf"
                     required
                     maxLength="11"
                     id="cpf"
@@ -153,10 +153,10 @@ export default function SeatsPage(props) {
                     placeholder="Digite seu CPF..."
                 />
 
-                <button type="submit">Reservar Assento(s)</button>
+                <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={movie.posterURL} alt={movie.title} title={movie.title} />
                 </div>

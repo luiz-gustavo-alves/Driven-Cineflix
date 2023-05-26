@@ -8,13 +8,13 @@ export default function SessionInfo(props) {
     return (
         <div>
             {sessionInfo.map(info =>
-                <SessionContainer key={info.id}>
+                <SessionContainer data-test="movie-day" key={info.id}>
 
                     {info.weekday} - {info.date}
 
                     <ButtonsContainer>
                         {info.showtimes.map(showtime => 
-                            <Link key={showtime.id} to={`/assentos/${showtime.id}`}>
+                            <Link data-test="showtime" key={showtime.id} to={`/assentos/${showtime.id}`}>
                                 <button>
                                     {showtime.name}
                                 </button>

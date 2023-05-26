@@ -32,27 +32,27 @@ export default function SuccessPage(props) {
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
                 <p>{userData.title}</p>
                 <p>{userData.date} - {userData.time}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
                 {userData.seatsNumber.map(seat => {
                     return (<p key={seat}>Assento {seat}</p>);
                 })}
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
                 <p>Nome: {userData.name}</p>
                 <p>CPF: {formatCPF(userData.cpf)}</p>
             </TextContainer>
             
             <Link to="/">
-                <button onClick={() => setUserData(null)}>Voltar para Home</button>
+                <button data-test="go-home-btn" onClick={() => setUserData(null)}>Voltar para Home</button>
             </Link>
         </PageContainer>
     );
