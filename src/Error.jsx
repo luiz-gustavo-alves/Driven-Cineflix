@@ -1,0 +1,22 @@
+/* Import Styled Components */
+import { PageContainer } from "./style/Error";
+
+/* Import locally images */
+import sad_face from "/sad_face.png";
+
+export default function Error(props) {
+
+    const {errorMessage} = props;
+
+    return (
+        <PageContainer>
+            <div>
+                {errorMessage}
+            </div>
+            <img src={sad_face} />
+            <button>
+                <a href="/">Refresh Page</a>
+            </button>
+        </PageContainer>
+    );
+}
