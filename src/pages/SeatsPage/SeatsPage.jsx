@@ -1,54 +1,162 @@
-import { PageContainer, SeatsContainer, SeatItem, CaptionContainer, CaptionCircle, CaptionItem, FormContainer, FooterContainer } from "./style"
+/* Import Styled Components and Dependencies */
+import { PageContainer, CaptionContainer, CaptionCircle, CaptionItem, FormContainer, FooterContainer } from "./style";
+import { Loading } from "../../style/Loading";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export default function SeatsPage() {
+/* Import Components */
+import Seats from "../../components/Seats/Seats";
+
+/* Import locally images */
+import loading from "/loading.gif";
+
+export default function SeatsPage(props) {
+
+    const { setError } = props;
+    const { idSessao } = useParams();
+    const navigate = useNavigate();
+
+    const [data, setData] = useState(null);
+    const [seatRegistration, setSeatRegistration] = useState({ids: [], name: "", cpf: ""});
+
+    const updateSeatRegistration = (newData) => {
+
+        setSeatRegistration(previousInfo => ({
+            ...previousInfo,
+            ...newData,
+        }));
+    }
+
+    const registerSeat = (event) => {
+
+        event.preventDefault();
+
+        const { ids, name, cpf } = seatRegistration;
+
+        const isValidRequest = (ids, name, cpf) => {
+
+            /* Check seats (If request contains at least one seat) */
+            if (ids.length <= 0) {
+                return {validRequest: false, message: "Por favor, selecione um assento."};
+            }
+
+            /* Check name (If request only contains letters and not only whitespaces) */
+            if (/[^a-zA-Z\s]+/.test(name) || !name.trim()) {
+                return {validRequest: false, message: "Nome invalido."};
+            }
+
+            /* Check CPF (If request only contains numbers and length is greater than 11) */
+            if (/[^0-9]/.test(cpf) || cpf.length <= 10) {
+                return {validRequest: false, message: "CPF invalido."};
+            }
+
+            /* Successful Request */
+            return {validRequest: true, message: "Successful registration."};
+        }
+
+        const { validRequest, message } = isValidRequest(ids, name, cpf);
+
+        if (validRequest) {
+
+            const URL = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
+            axios.post(URL, seatRegistration)
+            .then(() => navigate("/sucesso"))
+            .catch(err => setError({isTrue: true, message: err.message}));
+
+        } else {
+            alert(message);
+        }
+    }
+
+    useEffect(() => {
+
+        const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
+
+        axios.get(URL)
+        .then(res => {setData(res.data)})
+        .catch(err => setError({isTrue: true, message: err.message}));
+
+    }, [idSessao, setError]);
+
+    if (data === null) {
+        return (<Loading> <img src={loading} /> </Loading>);
+    }
+
+    const { day, movie, seats } = data;
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
-            <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
-            </SeatsContainer>
+            <Seats 
+                seats={seats} 
+                reservedSeats={seatRegistration.ids} 
+                updateReservedSeats={updateSeatRegistration} 
+            />
 
             <CaptionContainer>
+
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle 
+                        borderColor={"#0E7D71"} 
+                        backgroundColor={"#1AAE9E"} 
+                    />
                     Selecionado
                 </CaptionItem>
+
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle 
+                        borderColor={"#7B8B99"} 
+                        backgroundColor={"#C3CFD9"} 
+                    />
                     Disponível
                 </CaptionItem>
+
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle 
+                        borderColor={"#F7C52B"} 
+                        backgroundColor={"#FBE192"} 
+                    />
                     Indisponível
                 </CaptionItem>
+
             </CaptionContainer>
 
-            <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+            <FormContainer onSubmit={registerSeat}>
+                <label htmlFor="name">Nome do Comprador:</label>
+                <input type="text"
+                    required
+                    maxLength="100"
+                    id="name"
+                    value={seatRegistration.name}
+                    onChange={(e) => updateSeatRegistration({name: e.target.value})}
+                    placeholder="Digite seu nome..."
+                />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <label htmlFor="cpf">CPF do Comprador:</label>
+                <input type="text"
+                    required
+                    maxLength="11"
+                    id="cpf"
+                    value={seatRegistration.cpf}
+                    onChange={(e) => updateSeatRegistration({cpf: e.target.value})}
+                    placeholder="Digite seu CPF..."
+                />
 
-                <button>Reservar Assento(s)</button>
+                <button type="submit">Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movie.posterURL} alt={movie.title} title={movie.title} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{movie.title}</p>
+                    <p>{day.weekday} - {data.name}</p>
                 </div>
             </FooterContainer>
 
         </PageContainer>
-    )
+    );
 }

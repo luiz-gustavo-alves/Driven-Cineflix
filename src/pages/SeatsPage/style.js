@@ -13,17 +13,7 @@ export const PageContainer = styled.div`
     padding-top: 70px;
 `;
 
-export const SeatsContainer = styled.div`
-    width: 330px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-`;
-
-export const FormContainer = styled.div`
+export const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
@@ -32,6 +22,7 @@ export const FormContainer = styled.div`
     font-size: 18px;
     button {
         align-self: center;
+        cursor: pointer;
     }
     input {
         width: calc(100vw - 60px);
@@ -47,8 +38,8 @@ export const CaptionContainer = styled.div`
 `;
 
 export const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid ${props => props.borderColor};         // Essa cor deve mudar
+    background-color: ${props => props.backgroundColor};    // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -63,20 +54,6 @@ export const CaptionItem = styled.div`
     flex-direction: column;
     align-items: center;
     font-size: 12px;
-`;
-
-export const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
-    font-family: 'Roboto';
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 3px;
 `;
 
 export const FooterContainer = styled.div`
