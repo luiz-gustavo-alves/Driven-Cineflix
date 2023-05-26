@@ -1,5 +1,5 @@
 /* Import Styled Components */
-import { PageContainer } from "./style/Error";
+import { PageContainer } from "./style";
 
 /* Import locally images */
 import sad_face from "/sad_face.png";
