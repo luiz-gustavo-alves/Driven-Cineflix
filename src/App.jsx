@@ -30,8 +30,8 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<HomePage setError={setError} />} />
                     <Route path="/sessoes/:idFilme" element={<SessionsPage setError={setError} />} />
-                    <Route path="/assentos/:idSessao" element={<SeatsPage />} />
-                    <Route path="/sucesso" element={<SuccessPage />} />
+                    <Route path="/assentos/:idSessao" element={<SeatsPage setError={setError}/>} />
+                    <Route path="/sucesso" element={<SuccessPage setError={setError}/>} />
 
                     <Route path="/404" element={<Error errorMessage={"404 Page not found"} />} />
                     <Route path="*" element={<Navigate to="/404" />} />
