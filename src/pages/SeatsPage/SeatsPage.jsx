@@ -18,14 +18,18 @@ export default function SeatsPage(props) {
     const navigate = useNavigate();
 
     const [movieData, setMovieData] = useState(null);
-    const [seatRegistration, setSeatRegistration] = useState({ids: [], numbers: [], name: "", cpf: ""});
+    const [seatInfo, setseatInfo] = useState({ids: [], numbers: [], name: "", cpf: ""});
 
-    const updateSeatRegistration = (newData) => {
+    const updateseatInfo = (newData) => {
 
-        setSeatRegistration(previousInfo => ({
+        setseatInfo(previousInfo => ({
             ...previousInfo,
             ...newData,
         }));
+    }
+
+    const parseSpecialChar = (word) => {
+        return word.normalize("NFD").replace(/\p{Diacritic}/gu, "");
     }
 
     const registerSeat = (event) => {
@@ -53,20 +57,20 @@ export default function SeatsPage(props) {
             return {validRequest: true, message: "Successful registration."};
         }
 
-        const { validRequest, message } = isValidRequest(seatRegistration.ids, seatRegistration.name, seatRegistration.cpf);
+        const { validRequest, message } = isValidRequest(seatInfo.ids, parseSpecialChar(seatInfo.name), seatInfo.cpf);
 
         if (validRequest) {
 
             const URL = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
-            axios.post(URL, {ids: seatRegistration.ids, name: seatRegistration.name, cpf: seatRegistration.cpf})
+            axios.post(URL, {ids: seatInfo.ids, name: seatInfo.name, cpf: seatInfo.cpf})
             .then(() => {
                 setUserData({
                     title: movieData.movie.title,
                     date: day.date,
                     time: movieData.name,
-                    seatsNumber: seatRegistration.numbers.sort(),
-                    name: seatRegistration.name,
-                    cpf: seatRegistration.cpf
+                    seatsNumber: seatInfo.numbers.sort(),
+                    name: seatInfo.name,
+                    cpf: seatInfo.cpf
                 });
                 navigate("/sucesso");
             })
@@ -99,9 +103,9 @@ export default function SeatsPage(props) {
 
             <Seats 
                 seats={seats} 
-                reservedSeats={seatRegistration.ids} 
-                seatsNumber={seatRegistration.numbers}
-                updateSeatRegistration={updateSeatRegistration} 
+                reservedSeats={seatInfo.ids} 
+                seatsNumber={seatInfo.numbers}
+                updateseatInfo={updateseatInfo} 
             />
 
             <CaptionContainer>
@@ -138,8 +142,8 @@ export default function SeatsPage(props) {
                     required
                     maxLength="100"
                     id="name"
-                    value={seatRegistration.name}
-                    onChange={(e) => updateSeatRegistration({name: e.target.value})}
+                    value={seatInfo.name}
+                    onChange={(e) => updateseatInfo({name: e.target.value})}
                     placeholder="Digite seu nome..."
                 />
 
@@ -148,8 +152,8 @@ export default function SeatsPage(props) {
                     required
                     maxLength="11"
                     id="cpf"
-                    value={seatRegistration.cpf}
-                    onChange={(e) => updateSeatRegistration({cpf: e.target.value})}
+                    value={seatInfo.cpf}
+                    onChange={(e) => updateseatInfo({cpf: e.target.value})}
                     placeholder="Digite seu CPF..."
                 />
 

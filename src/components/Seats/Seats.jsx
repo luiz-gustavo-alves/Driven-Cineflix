@@ -2,7 +2,7 @@ import { SeatsContainer, SeatItem } from "./style";
 
 export default function Seats(props) {
 
-    const { seats, reservedSeats, seatsNumber, updateSeatRegistration } = props;
+    const { seats, reservedSeats, seatsNumber, updateseatInfo } = props;
 
     const seatCondition = (id) => {
 
@@ -47,7 +47,7 @@ export default function Seats(props) {
                 newReservedSeats = [...reservedSeats];
                 newSeatsNumber = [...seatsNumber];
             }
-            updateSeatRegistration({ids: newReservedSeats, numbers: newSeatsNumber});
+            updateseatInfo({ids: newReservedSeats, numbers: newSeatsNumber});
         }
     }
 
