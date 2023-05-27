@@ -6,7 +6,7 @@ import sad_face from "/sad_face.png";
 
 export default function Error(props) {
 
-    const {errorMessage} = props;
+    const { errorMessage } = props;
 
     return (
         <PageContainer>

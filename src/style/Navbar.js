@@ -16,4 +16,15 @@ export const NavContainer = styled.div`
         text-decoration: none;
         color: #E8833A;
     }
+    button {
+        width: 30px;
+        background-color: white;
+        position: absolute;
+        left: 20px;
+        background-color: inherit;
+        cursor: pointer;
+    }
+    img {
+        width: 24px;
+    }
 `;

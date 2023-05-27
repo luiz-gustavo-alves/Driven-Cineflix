@@ -1,6 +1,6 @@
 /* Import Styled Components and Dependencies */
 import { NavContainer } from "./style/Navbar";
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import { Routes, Route, Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios';
 
@@ -11,6 +11,9 @@ import SessionsPage from "./pages/SessionsPage/SessionsPage";
 import SuccessPage from "./pages/SuccessPage/SuccessPage";
 import Error from "./pages/Error/Error";
 
+/* Import locally images */
+import left_arrow from "/left_arrow.png";
+
 /* Axios token configuration */
 const token = "uno6r9oP7lrt17ZaOROMIr8i";
 axios.defaults.headers.common['Authorization'] = token;
@@ -20,9 +23,17 @@ export default function App() {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState({isTrue: false, message: ""});
 
+    const navigate = useNavigate();
+    let location = useLocation();
+
     return (
-        <BrowserRouter>
+        <>
             <NavContainer>
+                {location.pathname != "/" && location.pathname != "/404" && !error.isTrue &&
+                    <button data-test="go-home-header-btn" onClick={() => navigate(-1)}>
+                        <img src={left_arrow} alt="go-back" />
+                    </button>
+                }
                 <Link to="/">CINEFLIX</Link>
             </NavContainer>
 
@@ -63,6 +74,6 @@ export default function App() {
                     />
                 </Routes>
             }
-        </BrowserRouter>
+        </>
     );
 }
